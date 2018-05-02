@@ -3,7 +3,7 @@
 /*
  * This file is part of the RsyFramework package
  *
- * (c) Dreamans <dreamans@163.com>
+ * (c) Dreamans <dreamans@rsycoder.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -60,4 +60,3 @@ class ClassLoader
         return false;
     }
 }
-
