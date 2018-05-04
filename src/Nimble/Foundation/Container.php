@@ -11,13 +11,24 @@
 
 namespace Nimble\Foundation;
 
+use InvalidArgumentException;
+
 class Container
 {
     private $variables = [];
 
+    private $readOnlyFields = [];
+
     public function __construct(array $vars = [])
     {
         foreach($vars as $key => $val) {
+            if (is_array($val)) {
+                if (count($val) != 2) {
+                    continue;
+                }
+                list($val, $readOnly) = $val;
+                $this->readOnlyFields[$key] = boolval($readOnly);
+            }
             $this->variables[$key] = $val;
         }
     }
@@ -29,6 +40,9 @@ class Container
 
     public function __set($key, $value)
     {
+        if (isset($this->readOnlyFields[$key]) && true === $this->readOnlyFields[$key]) {
+            throw new InvalidArgumentException(sprintf('Container $key "%s" is read only', $key));
+        }
         $this->variables[$key] = $value;
     }
 

@@ -61,7 +61,9 @@ class Bootstrap
     {
         $this->bootConfig = $this->bootConfig($config);
         $this->configure = new Configure($this->bootConfig->configPath);
+
         $this->bindErrorHandle();
+        $this->bootDefaultSetting();
     }
 
     private function bootConfig(array $config = [])
@@ -97,5 +99,16 @@ class Bootstrap
     private function bindErrorHandle()
     {
         new Error($this->bootConfig->userExceptionHandle);
+    }
+
+    private function bootDefaultSetting()
+    {
+        error_reporting(E_ALL);
+        if (defined('DEVELOP_DEBUG')) {
+            ini_set('display_errors', 'on');
+        } else {
+            ini_set('display_errors', 'off');
+        }
+        date_default_timezone_set('Asia/Shanghai');
     }
 }

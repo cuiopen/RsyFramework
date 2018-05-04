@@ -62,19 +62,18 @@ class ExceptionHandle
 
     protected function httpRender()
     {
-        $trace   = implode("<br/>", $this->trace());
+        $trace = implode("<br/>", $this->trace());
         $message = $this->message();
-        $msg     = "{$message['message']}";
-        $file    = "{$message['class']} in {$message['file']}:{$message['line']}";
+        $msg = "{$message['message']}";
+        $file = "{$message['class']} in {$message['file']}:{$message['line']}";
         $exClass = $message['class'];
-
         $tpl = '
             <!DOCTYPE html>
             <html lang="en">
                 <head>
                     <meta charset="utf-8">
                     <title>system exception occurred</title>
-                    <style>body{font: normal 9pt "Verdana";color: #000;background: #fff;}html,body,div,span,h1,p,pre{border:2;outline:0;font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0;}.container{margin: 1em 4em;}h1 {font: normal 18pt "Verdana";color: #f00;margin-bottom: .5em;}.message {color: #000;padding: 1em;font-size: 11pt;background: #f3f3f3;-webkit-border-radius: 10px;-moz-border-radius: 10px;border- radius:10px;margin-bottom: 1em;line-height: 160%;}.file {margin-bottom: 1em;font-weight: bold;}.traces{margin: 2em 0;} .traces p{border: 1px dashed #c00; padding:10px;line-height:1.5em;font-size:0.8em;}.copyright{color:     gray;font-size: 8pt;border-top: 1px solid #aaa;padding-top: 1em;margin-bottom: 1em;}</style>
+                    <style>body{font: normal 9pt "Verdana";color: #000;background: #fff;}html,body,div,span,h1,p,pre{border:2;outline:0;font-size:100%;vertical-align:baseline;background:transparent;margin:0;padding:0;}.container{margin: 1em 4em;}h1 {font: normal 18pt "Verdana";color: #f00;margin-bottom: .5em;}.message {color: #000;padding: 1em;font-size: 11pt;background: #f3f3f3;-webkit-border-radius: 10px;-moz-border-radius: 10px;border- radius:10px;margin-bottom: 1em;line-height: 160%;}.file {margin-bottom: 1em;font-weight: bold;}.traces{margin: 2em 0;} .traces p{border: 1px dashed #c00; padding:10px;line-height:1.5em;font-size:0.8em;}.copyright{color:gray;font-size: 8pt;border-top: 1px solid #aaa;padding-top: 1em;margin-bottom: 1em;}</style>
                 </head>
                 <body>
                     <div class="container">
@@ -82,7 +81,7 @@ class ExceptionHandle
                         <p class="message">'. $msg .'</p>
                         <div class="file">'. $file .'</div>
                         <div class="traces"><p>'. $trace .'</p></div>
-                        <p class="copyright">'.date(DATE_ATOM).' <a title="Support" href="http://develop.rsyshop.com/rsyframework" target="_blank">RsyFramework</a></p>
+                        <p class="copyright">'. date(DATE_ATOM) .' <a title="Support" href="http://develop.rsyshop.com/rsyframework" target="_blank">RsyFramework</a></p>
                     </div>
                 </body>
             </html>';

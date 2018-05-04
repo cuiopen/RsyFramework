@@ -27,8 +27,6 @@ class Error
 
     private function handle()
     {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 'off');
         set_error_handler([$this, 'handleError']);
         set_exception_handler([$this, 'handleException']);
         register_shutdown_function([$this, 'handleShutdown']);
