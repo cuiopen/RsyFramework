@@ -73,7 +73,6 @@ class Controller
     private function afterController()
     {
         $defaultHeaders = [
-            'Content-Type'  => 'charset=utf-8',
             'X-Powered-By'  => 'RsyFramework',
             'Cache-control' => 'private',
         ];
