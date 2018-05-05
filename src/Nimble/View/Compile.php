@@ -11,27 +11,63 @@
 
 namespace Nimble\View;
 
-use Nimble\View\Exception\ViewException;
+use Nimble\Exception\ViewException;
 
 class Compile
 {
+    protected $sourceKey;
+
+    protected $compileKey;
+
+    protected $storage;
+
     protected $content;
 
-    public static function build($sourceFile)
+    public static function build(Storage $storage, $tplName)
     {
-        $compile = new Compile($sourceFile);
+        $compile = new Compile($storage, $tplName);
+        $compile->checkNeedBuild()
+        && $compile->readContent()
+                   ->compileTpl()
+                   ->writeContent();
+
+        return $compile->compileKey;
     }
 
-    private function __construct($sourceFile)
+    private function __construct(Storage $storage, $tplName)
     {
-        $this->content = $this->getContent($sourceFile);
+        $this->storage = $storage;
+        $this->sourceKey = $this->storage->sourceKey($tplName);
+        $this->compileKey = $this->storage->compileKey($tplName);
     }
 
-    private function getContent()
+    private function checkNeedBuild()
     {
-        if (!is_file($this->sourceFile)) {
-            throw ViewException::sourceFileNotFound($this->sourceFile);
+        $smtime = $this->storage->keyMtime($this->sourceKey);
+        $cmtime = $this->storage->keyMtime($this->compileKey);
+        return (!$cmtime || $smtime >= $cmtime) ? true : false;
+    }
+
+    private function readContent()
+    {
+        $this->content = $this->storage->readContent($this->sourceKey);
+        return $this;
+    }
+
+    private function writeContent()
+    {
+        $this->storage->writeContent($this->compileKey, $this->content);
+        return $this;
+    }
+
+    private function compileTpl()
+    {
+        if (!$this->content) {
+            return $this;
         }
-        return file_get_contents($this->sourceFile);
+
+        $this->content = CompileSyntax::compileTags($this->content);
+
+        return $this;
     }
 }
