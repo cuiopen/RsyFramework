@@ -84,6 +84,11 @@ class Response
         $this->contentType = $contentType;
     }
 
+    public function setHeader($key, $val)
+    {
+        $this->header->set($key, $val);
+    }
+
     public function setStatusCode($code, $text = null)
     {
         if ($code < 100 || $code >= 600) {
