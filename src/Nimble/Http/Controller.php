@@ -53,14 +53,6 @@ class Controller
         }
         $ctlObject = new $this->container->controller($this->container);
 
-        if (method_exists($ctlObject, 'request')) {
-            call_user_func([$ctlObject, 'request'], $this->container->request);
-        }
-
-        if (method_exists($ctlObject, 'main')) {
-            call_user_func([$ctlObject, 'main']);
-        }
-
         if (method_exists($ctlObject, 'response')) {
             $this->container->content = call_user_func([$ctlObject, 'response']);
         }
