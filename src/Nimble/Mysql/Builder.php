@@ -195,7 +195,7 @@ class Builder
             foreach ($this->wheres as $w) {
                 list($col, $bool, $val) = $w;
                 if ($bool) {
-                    $arrWhere[] = "{$col} {$bool} {$val}";
+                    $arrWhere[] = "`{$col}` {$bool} {$val}";
                 } else {
                     $arrWhere[] = $col;
                 }
