@@ -45,17 +45,7 @@ class Router
 
     private function formatRouterMap()
     {
-        $arrRoute2Ctl = [];
-        foreach($this->routerMap as $uri => $map) {
-            if (is_array($map)) {
-                foreach($map as $suri => $smap) {
-                    $urlPath = "{$uri}/{$suri}";
-                    $arrRoute2Ctl[$urlPath] = $smap;
-                }
-            } else {
-                $arrRoute2Ctl[$uri] = $map;
-            }
-        }
+        $arrRoute2Ctl = $this->serialMap($this->routerMap);
         $url2Map = [];
         foreach($arrRoute2Ctl as $uri => $map) {
             $urlPath = self::safeFilterUriPath($uri);
@@ -67,5 +57,18 @@ class Router
     private static function safeFilterUriPath($uri)
     {
         return '/'. strtolower(trim($uri, " \t\n\r\0\x0B/"));
+    }
+
+    private function serialMap($routerMap, array $extUri = [])
+    {
+        $arrSerialMap = [];
+        foreach($routerMap as $uri => $map) {
+            if (is_array($map)) {
+                $arrSerialMap = array_merge($arrSerialMap, $this->serialMap($map, array_merge($extUri, [$uri])));
+            } else {
+                $arrSerialMap[implode('/', array_merge($extUri, [$uri]))] = $map;
+            }
+        }
+        return $arrSerialMap;
     }
 }
