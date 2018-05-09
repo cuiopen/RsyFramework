@@ -15,15 +15,15 @@ use RuntimeException;
 
 class QueryException extends RuntimeException 
 {
-    public static function executeSql(array $errorInfo, $sql)
+    public static function executeSql(array $errorInfo, $sql, $code = 1)
     {
         $message = sprintf('Mysql query error %s(%s): %s, SQL: [ %s ]', $errorInfo[1], $errorInfo[0], $errorInfo[2], $sql);
-        return new static($message);
+        return new static($message, $code);
     }
 
-    public static function transaction($message)
+    public static function transaction($message, $code = 1)
     {
         $message = sprintf("Mysql translation error: %s", $message);
-        return new static($message);
+        return new static($message, $code);
     }
 }

@@ -105,7 +105,7 @@ class Client
         $errorInfo = $pdoSth->errorInfo();
         if ($errorInfo[0] != '00000') {
             $this->queryErrorCb($errorInfo, $sql, $prepare);
-            throw QueryException::executeSql($errorInfo, $sql);
+            throw QueryException::executeSql($errorInfo, $sql, $errorInfo[1]);
         }
         list($execFinishUsTime, $execFinishSecTime) = explode(' ', microtime());
         $execUsTime = round((($execFinishUsTime + $execFinishSecTime) - ($execStartUsTime + $execStartSecTime)) * 1000, 3);
