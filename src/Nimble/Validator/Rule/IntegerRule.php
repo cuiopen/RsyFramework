@@ -11,17 +11,10 @@
 
 namespace Nimble\Validator\Rule;
 
-class MaxRule implements RuleInterface
+class IntegerRule implements RuleInterface
 {
     public static function rule($value, $param)
     {
-        if ($value === null || $value === "") {
-            return true;
-        }
-        if (!is_numeric($value)) {
-            return false;
-        }
-
-        return $value <= floatval($param);
+        return is_numeric($value);
     }
 }

@@ -15,6 +15,6 @@ class RequireRule implements RuleInterface
 {
     public static function rule($value, $param)
     {
-        return !empty($value);
+        return $value !== null;
     }
 }
