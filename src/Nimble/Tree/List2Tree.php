@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nimble\List2Tree;
+namespace Nimble\Tree;
 
-class Tree 
+class List2Tree
 {
     private $tree = null;
 
@@ -21,26 +21,30 @@ class Tree
 
     private $currentKey;
 
+    private $childrenKey;
+
     private $taskList = [];
 
     private $rawData = [];
 
-    private function __construct(array $data, $rootId = 0, $parentKey = 'parent_id', $currentKey = 'id')
+    private function __construct(array $data, $rootId = 0, $parentKey = 'parent_id', $currentKey = 'id', $childrenKey = 'children')
     {
         $this->tree = $this->createEmptyNode();
         $this->rootId = $rootId;
         $this->parentKey = $parentKey;
         $this->currentKey = $currentKey;
+        $this->childrenKey = $childrenKey;
+
         $this->rawData = $data;
     }
 
-    public static function build(array $data, $rootId = 0, $parentKey = 'parent_id', $currentKey = 'id')
+    public static function build(array $data, $rootId = 0, $parentKey = 'parent_id', $currentKey = 'id', $childrenKey = 'children')
     {
         $instance = new List2Tree($data);
         $instance->createRootNode();
         $instance->createTreeNode();
 
-        return $instance->tree;
+        return $instance->tree->{$childrenKey};
     }
 
     private function createTreeNode()
@@ -51,9 +55,9 @@ class Tree
                 break;
             }
             foreach ($this->rawData as $key => $item) {
-                if ($item[$this->parentKey] == $node->getData()->{$this->currentKey}) {
-                    $subNode = new TreeNode($node, new DataNode($item));
-                    $node->appendChildren($subNode, $item[$this->currentKey]);
+                if ($item[$this->parentKey] == $node->{$this->currentKey}) {
+                    $subNode = new TreeNode($item, $this->childrenKey);
+                    $node->{$this->childrenKey}[] = $subNode;
                     unset($this->rawData[$key]);
                     $this->appendTask($subNode);
                 }
@@ -64,10 +68,10 @@ class Tree
     private function createRootNode()
     {
         foreach ($this->rawData as $key => $item) {
-            if ($item[$this->parentKey] == 0) {
-                $node = new TreeNode($this->tree, new DataNode($item));
+            if ($item[$this->parentKey] == $this->rootId) {
+                $node = new TreeNode($item, $this->childrenKey);
+                $this->tree->{$this->childrenKey}[] = $node;
                 $this->appendTask($node);
-                $this->tree->appendChildren($node, $item[$this->currentKey]);
                 unset($this->rawData[$key]);
             }
         }
